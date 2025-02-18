@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:provider_practices/Providers/movie_provider.dart';
+import 'package:provider_practices/Screens/favorite_movies_page.dart';
 
 void main() {
   runApp(
@@ -18,8 +18,31 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false, // Hide the debug badge
       home: Scaffold(
-        appBar: AppBar(title: const Text('Movies List')),
+        appBar: AppBar(
+          title: const Text('Movies List'),
+          actions: [
+            Consumer<MovieProvider>(
+              builder: (context, movieProvider, child) {
+                return IconButton(
+                  icon: Badge(
+                    count: movieProvider.myFavMovies.length,
+                    child: const Icon(Icons.favorite),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FavoriteMoviesPage(),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
         body: Consumer<MovieProvider>(
           builder: (context, movieProvider, child) {
             return ListView.builder(
@@ -52,6 +75,34 @@ class MainApp extends StatelessWidget {
   }
 }
 
+class Badge extends StatelessWidget {
+  final int count;
+  final Widget child;
 
+  const Badge({super.key, required this.count, required this.child});
 
-
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        child,
+        if (count > 0)
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Colors.red,
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              '$count',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}

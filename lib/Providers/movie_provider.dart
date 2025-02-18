@@ -1,8 +1,6 @@
-
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider_practices/Models/movie_model.dart';
-
 
 List<Movie> initialMovies = List.generate(
   25,
@@ -27,18 +25,9 @@ class MovieProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void removeFavorite(Movie movie) {
+    _myFavMovies.remove(movie);
+    notifyListeners();
+  }
 }
-
-  List<Movie> _movies = initialMovies;
-  List<Movie> _MyferedMovies = [];
-
-  List<Movie> get movies => _movies;
-  List<Movie> get myFavMovies => _MyferedMovies;
-
-  void addMovie(Movie movie) {
-    _MyferedMovies.add(movie);
-  }
-
-  void removeMovie(Movie movie) {
-    _MyferedMovies.remove(movie);
-  }
